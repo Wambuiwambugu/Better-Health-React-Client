@@ -1,14 +1,31 @@
 import React from 'react'
 import { useState } from 'react';
 
-function Signup({signUpUser}) {
+
+function Signup({loginStatus,loggedinUser}) {
+  const signupUrl = "http://localhost:9292/signup";
     const [name, setName] = useState("")
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     function handleSubmit(e){
         e.preventDefault();
-        signUpUser(name,email,password)
+        const newUser = {
+          name: name,
+          email_address: email,
+          password: password
+        }
+        fetch(`${signupUrl}`,{
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+        .then(res => res.json)
+        .then(data => (data))
+        
+        
     }
 
 
@@ -21,7 +38,7 @@ function Signup({signUpUser}) {
                 <label htmlFor="name">Your Name: </label>
                 <input
                   type="text"
-                  value={email}
+                  value={name}
                   placeholder="enter full namel"
                   onChange={({ target }) => setName(target.value)}
                 />
@@ -41,10 +58,10 @@ function Signup({signUpUser}) {
                   placeholder="enter a password"
                   onChange={({ target }) => setPassword(target.value)}
                 />
-                <button type="submit">Login</button>
+                <button type="submit">Signup</button>
             </div>
             <div>
-                <p>Already have an accoun? Login here</p>
+                <p>Already have an account? Login here</p>
             </div>
         </form>
       );
